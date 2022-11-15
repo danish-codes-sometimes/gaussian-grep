@@ -5,12 +5,18 @@
 
 
 infile=$1
+# Check for multiple jobs and consider the last job for the analysis
+lastjobstarts=$(grep -n "Proceeding to internal job step number" $infile | awk -F: 'END{print $1}');
+if [ -z "$lastjobstarts" ]
+then
+        lastjobstarts=0
+fi
 
 #===============================================================================================================================================================
 #   extract data
 #===============================================================================================================================================================
-Ehomo=`cat $infile | grep "Alpha  occ. eigenvalues" | tail -1 | awk '{print $NF}'`  ; 
-Elumo=`cat $infile | grep "Alpha virt. eigenvalues" | head -n -1 | sed -n "1p" | awk '{print $5}'`  ; 
+Ehomo=`tail -n+$lastjobstarts $infile | grep "Alpha  occ. eigenvalues" | tail -1 | awk '{print $NF}'`  ; 
+Elumo=`tail -n+$lastjobstarts $infile | grep "Alpha virt. eigenvalues" | head -n -1 | sed -n "1p" | awk '{print $5}'`  ; 
 
 # convert componnets to standard representation
 Ehomo=`echo ${Ehomo} | sed 's/D/\*10\^/' | sed 's/+//'`
