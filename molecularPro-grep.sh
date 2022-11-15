@@ -42,6 +42,13 @@ omega=$(echo "scale=8; 0.5*(($mu)^2/(2*($etha)))" | bc -l);
 #===============================================================================================================================================================
 #   print extracted data
 #===============================================================================================================================================================
-printf  "structure,Ehomo(eV),Elumo(eV),Eg,I,A,η,μ,ω\n"
+printf  "outfile: %s\n Ehomo(eV) = %.4f\n Elumo(eV) = %.4f \n Eg(eV) = %.4f \n I = %.4f \n A = %.4f \n η = %.4f \n ω = %.4f \n μ = %.4f\n" $infile $Ehomo $Elumo $gap $I $A $etha $mu $omega
 
-printf  "%s,=%.4f,=%.4f,=%.4f,=%.4f,=%.4f,=%.4f,=%.4f,=%.4f\n" $file $Ehomo $Elumo $gap $I $A $etha $mu $omega 
+printf "\n"
+echo "---in kcal/mol---"
+Ehomo_kcm=$(echo "scale=8; ($Ehomo*23.0609)" | bc -l);
+Elumo_kcm=$(echo "scale=8; ($Elumo*23.0609)" | bc -l);
+gap_kcm=$(echo "scale=8; ($gap*23.0609)" | bc -l);
+
+printf "Ehomo(kcal/mol) = %.4f\n Elumo(kcal/mol) = %.4f \n Eg(kcal/mol) = %.4f \n" $Ehomo_kcm $Elumo_kcm $gap_kcm
+
